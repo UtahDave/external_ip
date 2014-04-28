@@ -37,7 +37,7 @@ def external_ip():
     Return the external IP address
     '''
     check_url = __opts__.get('external_ip.server', False)
-    if check_url: 
+    if check_url:
         try:
             timeout = __opts__.get('external_ip.timeout', 0.5)
             r = requests.get(check_url, timeout=timeout)
