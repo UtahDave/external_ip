@@ -12,6 +12,7 @@
 '''
 
 # Import Python Libs
+import logging
 import requests
 from pprint import pprint
 
@@ -21,26 +22,22 @@ from salt.utils.validate.net import ipv4_addr as _ipv4_addr
 # Import errors
 from requests.exceptions import Timeout, ConnectionError, HTTPError
 
+log = logging.getLogger(__name__)
 
 def external_ip():
     '''
     Return the external IP address
     '''
     check_url = 'http://boucha.saltstack.com:8080'
-    __opts__ = {}
 
-    if __opts__.get('request_external_ip', True):
+    if __opts__.get('request_external_ip', False):
         try:
             r = requests.get(check_url, timeout=0.1)
             ip_addr = r.json()
-            pprint(ip_addr)
             return {'external_ip': ip_addr['ip_addr']}
         except Timeout as exc:
-            print('Timeout exceeded: {0}'.format(exc))
+            log.debug('Timeout exceeded: {0}'.format(exc))
         except (ConnectionError, HTTPError) as exc:
-            print('Connection error: {0}'.format(exc))
+            log.debug('Connection error: {0}'.format(exc))
 
     return {'external_ip': None}
-
-
-#external_ip()
