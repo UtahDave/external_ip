@@ -42,7 +42,8 @@ def external_ip():
             timeout = __opts__.get('external_ip.timeout', 0.5)
             r = requests.get(check_url, timeout=timeout)
             ip_addr = r.json()
-            return {'external_ip': ip_addr['ip_addr']}
+            if _ipv4_addr(ip_addr['ip_addr']):
+                return {'external_ip': ip_addr['ip_addr']}
         except Timeout as exc:
             log.debug('Timeout exceeded: {0}'.format(exc))
         except (ConnectionError, HTTPError) as exc:
